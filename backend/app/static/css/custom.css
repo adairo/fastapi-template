@@ -1,0 +1,28 @@
+article.success {
+  background-color: var(--pico-primary-background);
+  border: 1px solid var(--pico-primary);
+  padding: 1rem;
+  border-radius: var(--pico-border-radius);
+}
+
+article.error {
+  background-color: var(--pico-del-color);
+  color: var(--pico-background-color);
+  padding: 1rem;
+  border-radius: var(--pico-border-radius);
+}
+
+.error-text {
+  color: var(--pico-del-color);
+  font-size: 0.875rem;
+}
+
+.user-row {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--pico-muted-border-color);
+}
+
+.user-row:last-child {
+  border-bottom: none;
+}

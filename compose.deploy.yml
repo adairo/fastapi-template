@@ -47,7 +47,7 @@ services:
   backend:
     restart: always
     environment:
-      FRONTEND_HOST: https://${DOMAIN:?Variable not set}
+      SERVER_HOST: https://${DOMAIN:?Variable not set}
     labels:
       # Route HTTPS traffic for this domain
       - traefik.http.routers.backend-https.rule=Host(`${DOMAIN:?Variable not set}`)

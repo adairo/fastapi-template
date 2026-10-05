@@ -1,8 +1,4 @@
 .vscode/*
 !.vscode/extensions.json
-node_modules/
-backend/app/frontend/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+backend/coverage/
+backend/htmlcov/

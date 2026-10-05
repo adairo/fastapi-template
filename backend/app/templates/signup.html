@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Sign up - {{ project_name }}{% endblock %}
+{% block content %}
+<article>
+  <header><h1>Sign up</h1></header>
+  <form method="post" action="/signup">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>
+      Email
+      <input type="email" name="email" value="{{ email or '' }}" required autocomplete="email">
+      {% if errors and errors.email %}<small class="error-text">{{ errors.email }}</small>{% endif %}
+    </label>
+    <label>
+      Full name
+      <input type="text" name="full_name" value="{{ full_name or '' }}" required autocomplete="name">
+      {% if errors and errors.full_name %}<small class="error-text">{{ errors.full_name }}</small>{% endif %}
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" required autocomplete="new-password">
+      {% if errors and errors.password %}<small class="error-text">{{ errors.password }}</small>{% endif %}
+    </label>
+    <label>
+      Confirm password
+      <input type="password" name="confirm_password" required autocomplete="new-password">
+      {% if errors and errors.confirm_password %}<small class="error-text">{{ errors.confirm_password }}</small>{% endif %}
+    </label>
+    <button type="submit">Sign up</button>
+  </form>
+  <footer>
+    <small><a href="/login">Already have an account? Log in</a></small>
+  </footer>
+</article>
+{% endblock %}

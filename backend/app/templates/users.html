@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Users - {{ project_name }}{% endblock %}
+{% block content %}
+<article>
+  <header><h1>Users</h1></header>
+
+  <h2>Create user</h2>
+  <form method="post" action="/users">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="grid">
+      <label>
+        Email
+        <input type="email" name="email" value="{{ form_email or '' }}" required>
+        {% if errors and errors.email %}<small class="error-text">{{ errors.email }}</small>{% endif %}
+      </label>
+      <label>
+        Full name
+        <input type="text" name="full_name" value="{{ form_full_name or '' }}">
+      </label>
+    </div>
+    <div class="grid">
+      <label>
+        Password
+        <input type="password" name="password" required>
+        {% if errors and errors.password %}<small class="error-text">{{ errors.password }}</small>{% endif %}
+      </label>
+      <label>
+        Confirm password
+        <input type="password" name="confirm_password" required>
+        {% if errors and errors.confirm_password %}<small class="error-text">{{ errors.confirm_password }}</small>{% endif %}
+      </label>
+    </div>
+    <fieldset>
+      <label>
+        <input type="checkbox" name="is_active" value="true" checked>
+        Active
+      </label>
+      <label>
+        <input type="checkbox" name="is_superuser" value="true">
+        Superuser
+      </label>
+    </fieldset>
+    <button type="submit">Create user</button>
+  </form>
+</article>
+
+<article>
+  <header><h2>All users</h2></header>
+  {% for user in users %}
+  <div class="user-row">
+    <h3>{{ user.email }}</h3>
+    <form method="post" action="/users/{{ user.id }}/edit">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="grid">
+        <label>
+          Email
+          <input type="email" name="email" value="{{ user.email }}" required>
+          {% if edit_errors and edit_user_id == user.id and edit_errors.email %}<small class="error-text">{{ edit_errors.email }}</small>{% endif %}
+        </label>
+        <label>
+          Full name
+          <input type="text" name="full_name" value="{{ user.full_name or '' }}">
+        </label>
+      </div>
+      <div class="grid">
+        <label>
+          New password
+          <input type="password" name="password" placeholder="Leave blank to keep current">
+          {% if edit_errors and edit_user_id == user.id and edit_errors.password %}<small class="error-text">{{ edit_errors.password }}</small>{% endif %}
+        </label>
+        <label>
+          Confirm password
+          <input type="password" name="confirm_password">
+          {% if edit_errors and edit_user_id == user.id and edit_errors.confirm_password %}<small class="error-text">{{ edit_errors.confirm_password }}</small>{% endif %}
+        </label>
+      </div>
+      <fieldset>
+        <label>
+          <input type="checkbox" name="is_active" value="true" {% if user.is_active %}checked{% endif %}>
+          Active
+        </label>
+        <label>
+          <input type="checkbox" name="is_superuser" value="true" {% if user.is_superuser %}checked{% endif %}>
+          Superuser
+        </label>
+      </fieldset>
+      <button type="submit">Save changes</button>
+    </form>
+    {% if user.id != current_user.id %}
+    <form method="post" action="/users/{{ user.id }}/delete" onsubmit="return confirm('Delete user {{ user.email }}?');" style="margin-top: 1rem;">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="secondary">Delete user</button>
+    </form>
+    {% endif %}
+  </div>
+  {% else %}
+  <p>No users yet.</p>
+  {% endfor %}
+</article>
+{% endblock %}

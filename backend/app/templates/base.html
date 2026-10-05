@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="/static/css/pico.min.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <title>{% block title %}{{ project_name }}{% endblock %}</title>
+  </head>
+  <body>
+    {% if current_user is defined and current_user %}
+    <nav class="container">
+      <ul>
+        <li><strong>{{ project_name }}</strong></li>
+      </ul>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/settings">Settings</a></li>
+        {% if current_user.is_superuser %}
+        <li><a href="/users">Users</a></li>
+        {% endif %}
+        <li>
+          <form method="post" action="/logout" style="margin:0">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" class="secondary">Log out</button>
+          </form>
+        </li>
+      </ul>
+    </nav>
+    {% endif %}
+    <main class="container">
+      {% if flash %}
+      <article class="{{ flash.category }}">
+        {{ flash.message }}
+      </article>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

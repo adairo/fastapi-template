@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Home - {{ project_name }}{% endblock %}
+{% block content %}
+<article>
+  <header><h1>Welcome</h1></header>
+  <p>You are signed in as <strong>{{ current_user.email }}</strong>.</p>
+  <p><a href="/settings" role="button">Go to settings</a></p>
+  {% if current_user.is_superuser %}
+  <p><a href="/users" role="button" class="secondary">Manage users</a></p>
+  {% endif %}
+</article>
+{% endblock %}

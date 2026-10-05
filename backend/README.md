@@ -23,13 +23,24 @@ $ uv run bash scripts/prestart.sh
 $ uv run fastapi dev
 ```
 
-The API is available at `http://localhost:8000`, with automatic interactive docs at `http://localhost:8000/docs`.
+The application is available at `http://localhost:8000`.
+
+Open `http://localhost:8000/login` to sign in. The first superuser is created from `FIRST_SUPERUSER` and `FIRST_SUPERUSER_PASSWORD` in `.env`.
+
+Mailpit is available at `http://localhost:8025` for password recovery and new-account emails during development.
 
 ## General Workflow
 
 Run backend commands from `./backend/` with `uv run`. Make sure your editor uses the Python interpreter at `.venv/bin/python` in the project root.
 
-Modify or add SQLModel models for data and SQL tables in `./backend/app/models.py`, API endpoints in `./backend/app/api/`, CRUD (Create, Read, Update, Delete) utils in `./backend/app/crud.py`.
+The application is organized as follows:
+
+* SQLModel models in `./backend/app/models.py`
+* CRUD helpers in `./backend/app/crud.py`
+* HTML routes in `./backend/app/web/`
+* Jinja2 page templates in `./backend/app/templates/`
+* Static assets in `./backend/app/static/`
+* Session and CSRF helpers in `./backend/app/web/deps.py`
 
 ## VS Code
 
@@ -39,7 +50,7 @@ The setup is also already configured so you can run the tests through the VS Cod
 
 ## Full Stack with Docker Compose
 
-To run the backend and built frontend in Docker Compose:
+To run the backend in Docker Compose:
 
 ```console
 $ docker compose run --rm backend bash scripts/prestart.sh
@@ -126,20 +137,8 @@ If you don't want to start with the default models and want to remove them / mod
 
 ## Email Templates
 
-The email templates are written with [React Email](https://react.email) in `./packages/react-email/`. The `emails` directory holds one component per email and the `ui` directory holds the shared components (layout, heading, button, link, callout).
+Password recovery and new-account emails use Jinja2 HTML templates in `./backend/app/email-templates/`.
 
-The rendered HTML in `./backend/app/email-templates/` is generated from those components. It is what the application sends and should not be edited by hand.
+The context for each email is built in `generate_*_email()` in `./backend/app/utils.py`. If you add a placeholder to a template, add the matching value there too.
 
-To preview the emails while editing them, start the dev server from the root of the project:
-
-```console
-$ bun run email:dev
-```
-
-Values coming from the backend are declared as Jinja placeholders in the component props, for example `username = "{{ username }}"`. The context for each email is built in `generate_*_email()` in `./backend/app/utils.py`, so a new placeholder needs to be added there too.
-
-Once you are done, regenerate the templates used by the application:
-
-```console
-$ bun run email:export
-```
+Password reset links use `SERVER_HOST` from settings. For local development the default is `http://localhost:8000`. In production, set `SERVER_HOST` to your public URL so email links point to the correct host.
