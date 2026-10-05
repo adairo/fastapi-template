@@ -5,55 +5,32 @@
 
 ## Technology Stack and Features
 
-- ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
+- ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend and server-rendered HTML pages.
   - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
-  - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
+  - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for data validation and settings management.
   - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
-- 🚀 [React](https://react.dev) for the frontend.
-  - 🧩 Built into the backend application and served by FastAPI on the same domain as the API.
-  - 💃 Using TypeScript, hooks, [Vite](https://vitejs.dev), and other parts of a modern frontend stack.
-  - 🎨 [Tailwind CSS](https://tailwindcss.com) and [shadcn/ui](https://ui.shadcn.com) for the frontend components.
-  - 🤖 An automatically generated frontend client.
-  - 🧪 [Playwright](https://playwright.dev) for end-to-end testing.
-  - 🦇 Dark mode support.
+  - 📄 [Jinja2](https://jinja.palletsprojects.com) templates for HTML pages.
+  - 🎨 [Pico CSS](https://picocss.com) vendored for styling.
+- 🔒 Secure password hashing by default.
+- 🍪 Session cookie authentication.
+- 📫 Email-based password recovery.
+- ✉️ Jinja2 HTML email templates.
+- 📬 [Mailpit](https://mailpit.axllent.org) for local email testing during development.
+- ✅ Tests with [Pytest](https://pytest.org).
 - ☁️ [FastAPI Cloud](https://fastapicloud.com) for deployment.
 - 🐋 [Docker Compose](https://www.docker.com) for local services and self-hosted deployment.
   - 📞 [Traefik](https://traefik.io) as a reverse proxy with automatic HTTPS.
-- 🔒 Secure password hashing by default.
-- 🔑 JWT (JSON Web Token) authentication.
-- 📫 Email-based password recovery.
-- ✉️ [React Email](https://react.email) for email templates.
-- 📬 [Mailpit](https://mailpit.axllent.org) for local email testing during development.
-- ✅ Tests with [Pytest](https://pytest.org).
 - 🏭 CI (continuous integration) and CD (continuous deployment) based on GitHub Actions.
 
-### Dashboard Login
+## What This Template Includes
 
-![Dashboard login screenshot](img/login.png)
+User account management only:
 
-### Dashboard - Admin
+- Public signup, login, and password recovery
+- Signed-in users can edit their profile and change their password
+- Superusers can list, create, edit, and delete users
 
-![Admin dashboard screenshot](img/dashboard.png)
-
-### Dashboard - Items
-
-![Items dashboard screenshot](img/dashboard-items.png)
-
-### Dashboard - Dark Mode
-
-![Dark mode dashboard screenshot](img/dashboard-dark.png)
-
-### React Email Templates
-
-![Email templates screenshot](img/react-email.png)
-
-### Mailpit - Local Email Testing
-
-![Mailpit screenshot](img/mailpit.png)
-
-### Interactive API Documentation
-
-![API docs](img/docs.png)
+There is no separate frontend build, no JSON API, and no sample Items/Todo CRUD.
 
 ## How to Use It
 
@@ -62,10 +39,6 @@ Click the **Use this template** button at the top of this page to create a new r
 ## Backend Development
 
 Backend docs: [backend/README.md](./backend/README.md).
-
-## Frontend Development
-
-Frontend docs: [frontend/README.md](./frontend/README.md).
 
 ## Deployment
 
@@ -77,7 +50,7 @@ Self-hosted deployment with Docker Compose: [deployment-docker-compose.md](./dep
 
 General development docs: [development.md](./development.md).
 
-This includes the local FastAPI and Vite workflow, Docker Compose services, `.env` configuration, and more.
+This includes the local FastAPI workflow, Docker Compose services, `.env` configuration, and more.
 
 ## Release Notes
 

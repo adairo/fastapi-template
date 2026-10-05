@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 from app.core.security import get_password_hash, verify_password
 from app.models import User, UserCreate, UserUpdate
 
-DUMMY_HASH = "$argon2id$v=19$m=65536,t=3,p=4$MjQyZWE1MzBjYjJlZTI0Yw$YTU4NGM5ZTZmYjE2NzZlZjY0ZWY3ZGRkY2U2OWFjNjk"
+DUMMY_HASH = get_password_hash("dummy_password")
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
