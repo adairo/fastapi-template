@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Settings - {{ project_name }}{% endblock %}
+{% block content %}
+<article>
+  <header><h1>Settings</h1></header>
+  <h2>Profile</h2>
+  <form method="post" action="/settings">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>
+      Full name
+      <input type="text" name="full_name" value="{{ full_name or current_user.full_name or '' }}" autocomplete="name">
+    </label>
+    <label>
+      Email
+      <input type="email" name="email" value="{{ email or current_user.email }}" required autocomplete="email">
+      {% if errors and errors.email %}<small class="error-text">{{ errors.email }}</small>{% endif %}
+    </label>
+    <button type="submit">Save profile</button>
+  </form>
+</article>
+
+<article>
+  <header><h2>Change password</h2></header>
+  <form method="post" action="/settings/password">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>
+      Current password
+      <input type="password" name="current_password" required autocomplete="current-password">
+      {% if password_errors and password_errors.current_password %}<small class="error-text">{{ password_errors.current_password }}</small>{% endif %}
+    </label>
+    <label>
+      New password
+      <input type="password" name="new_password" required autocomplete="new-password">
+      {% if password_errors and password_errors.new_password %}<small class="error-text">{{ password_errors.new_password }}</small>{% endif %}
+    </label>
+    <label>
+      Confirm new password
+      <input type="password" name="confirm_password" required autocomplete="new-password">
+      {% if password_errors and password_errors.confirm_password %}<small class="error-text">{{ password_errors.confirm_password }}</small>{% endif %}
+    </label>
+    <button type="submit">Change password</button>
+  </form>
+</article>
+
+<article>
+  <header><h2>Delete account</h2></header>
+  <form method="post" action="/settings/delete" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button type="submit" class="secondary">Delete my account</button>
+  </form>
+</article>
+{% endblock %}

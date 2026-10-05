@@ -1,36 +1,40 @@
 from pathlib import Path
 
 import sentry_sdk
-from fastapi import FastAPI
-from fastapi.routing import APIRoute
-from starlette.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Request
+from starlette.middleware.sessions import SessionMiddleware
+from starlette.responses import RedirectResponse
+from starlette.staticfiles import StaticFiles
 
-from app.api.main import api_router
 from app.core.config import settings
+from app.web.deps import LoginRequired
+from app.web.router import router as web_router
 
-FRONTEND_DIR = Path(__file__).parent / "frontend"
-
-
-def custom_generate_unique_id(route: APIRoute) -> str:
-    return f"{route.tags[0]}-{route.name}"
-
+STATIC_DIR = Path(__file__).parent / "static"
 
 if settings.SENTRY_DSN and settings.FASTAPI_ENV != "development":
     sentry_sdk.init(dsn=str(settings.SENTRY_DSN), enable_tracing=True)
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    generate_unique_id_function=custom_generate_unique_id,
+    openapi_url=None,
+    docs_url=None,
+    redoc_url=None,
 )
 
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[settings.FRONTEND_HOST],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    SessionMiddleware,
+    secret_key=settings.SECRET_KEY,
+    max_age=settings.SESSION_MAX_AGE_SECONDS,
+    https_only=settings.SERVER_HOST.startswith("https"),
 )
 
-app.include_router(api_router, prefix=settings.API_V1_STR)
-app.frontend("/", directory=FRONTEND_DIR)
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+app.include_router(web_router)
+
+
+@app.exception_handler(LoginRequired)
+async def login_required_handler(
+    _request: Request, _exc: LoginRequired
+) -> RedirectResponse:
+    return RedirectResponse(url="/login", status_code=303)
